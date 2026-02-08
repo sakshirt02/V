@@ -1,161 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Be My Valentine</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(135deg,#ffd6e8,#ffeef6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: "Poppins", sans-serif;
-  }
+  <meta charset="UTF-8" />
+  <title>Valentine 💖</title>
 
-  .card {
-    background: #fff;
-    padding: 40px 30px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,.15);
-    text-align: center;
-    width: 320px;
-    position: relative;
-  }
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-  .emoji {
-    font-size: 60px;
-  }
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #ffe4ef;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
 
-  h2 {
-    margin: 20px 0;
-    color: #333;
-  }
+    .card {
+      background: white;
+      width: 360px;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      z-index: 2;
+    }
 
-  .buttons {
-    margin-top: 30px;
-    position: relative;
-    height: 60px;
-  }
+    h2 {
+      margin-top: 15px;
+    }
 
-  button {
-    padding: 12px 26px;
-    border: none;
-    border-radius: 30px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: .2s;
-  }
+    button {
+      padding: 12px 30px;
+      border-radius: 30px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-  #yesBtn {
-    background: #ff4d6d;
-    color: white;
-  }
+    #yesBtn {
+      background: #ff4d6d;
+      color: white;
+      margin-top: 15px;
+    }
 
-  #noBtn {
-    background: #eee;
-    color: #333;
-    position: absolute;
-    right: 0;
-  }
+    #noBtn {
+      position: fixed; /* 🔥 key for fullscreen */
+      background: #eee;
+      color: black;
+      margin-top: 20px;
+      transition: top 0.25s ease, left 0.25s ease;
+    }
 
-  .yay {
-    display: none;
-    font-size: 22px;
-    margin-top: 20px;
-  }
-
-  canvas {
-    position: fixed;
-    top:0;
-    left:0;
-    pointer-events:none;
-  }
-
-  #noBtn {
-    transition: all 0.25s ease;
-  }
-</style>
+    .yay {
+      margin-top: 15px;
+      font-size: 20px;
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
 
-<canvas id="confetti"></canvas>
+  <div class="card">
+    <div style="font-size:40px;">😺 ❤️</div>
+    <h2>Diwaker, will you be my Valentine?</h2>
 
-<div class="card" id="card">
-  <div class="emoji">🐱❤️</div>
-  <h2 id="text">Diwaker, will you be my Valentine?</h2>
-
-  <div class="buttons">
     <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
+
+    <div class="yay" id="yayText">YAY!! 🎉💖</div>
   </div>
 
-  <div class="yay" id="yay">YAY!! 🎉💖</div>
-</div>
+  <button id="noBtn">No</button>
 
-<script>
-  const noBtn = document.getElementById("noBtn");
-  const yesBtn = document.getElementById("yesBtn");
-  const yay = document.getElementById("yay");
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const yayText = document.getElementById("yayText");
 
-  function moveNoButton() {
-    const card = document.querySelector(".card");
-    const cardRect = card.getBoundingClientRect();
-  
-    const maxX = cardRect.width - noBtn.offsetWidth - 20;
-    const maxY = cardRect.height - noBtn.offsetHeight - 100;
-  
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-  
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-  }
+    // Initial position of No button
+    noBtn.style.left = "50%";
+    noBtn.style.top = "70%";
 
-noBtn.addEventListener("mouseenter", moveNoButton);
-noBtn.addEventListener("touchstart", moveNoButton);
+    noBtn.addEventListener("mouseover", () => {
+      const padding = 20;
 
-  yesBtn.addEventListener("click", () => {
-    yay.style.display = "block";
-    startConfetti();
-  });
+      const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+      const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
-  // Confetti
-  const canvas = document.getElementById("confetti");
-  const ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
 
-  let pieces = [];
-
-  function startConfetti(){
-    for(let i=0;i<150;i++){
-      pieces.push({
-        x: Math.random()*canvas.width,
-        y: Math.random()*canvas.height,
-        r: Math.random()*6+2,
-        s: Math.random()*3+1
-      });
-    }
-    animate();
-  }
-
-  function animate(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    pieces.forEach(p=>{
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=`hsl(${Math.random()*360},100%,70%)`;
-      ctx.fill();
-      p.y += p.s;
-      if(p.y > canvas.height) p.y = 0;
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
     });
-    requestAnimationFrame(animate);
-  }
-</script>
+
+    yesBtn.addEventListener("click", () => {
+      yayText.style.display = "block";
+      noBtn.style.display = "none";
+    });
+  </script>
 
 </body>
 </html>
