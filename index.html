@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <title>Valentine 💖</title>
-
   <style>
     * {
       box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     body {
@@ -17,93 +16,107 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
+      overflow: hidden; /* Prevents scrollbars if the button moves to the edge */
     }
 
     .card {
       background: white;
       width: 360px;
-      padding: 30px;
+      padding: 40px;
       border-radius: 20px;
       text-align: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-      z-index: 2;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      z-index: 1;
     }
 
     h2 {
-      margin-top: 15px;
+      color: #ff4d6d;
+      margin-bottom: 25px;
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      align-items: center;
     }
 
     button {
-      padding: 12px 30px;
+      padding: 12px 25px;
       border-radius: 30px;
       border: none;
-      font-size: 16px;
+      font-size: 18px;
+      font-weight: bold;
       cursor: pointer;
+      transition: transform 0.2s ease;
     }
 
     #yesBtn {
       background: #ff4d6d;
       color: white;
-      margin-top: 15px;
     }
 
     #noBtn {
-      position: fixed; /* 🔥 key for fullscreen */
-      background: #eee;
-      color: black;
-      margin-top: 20px;
-      transition: top 0.25s ease, left 0.25s ease;
+      position: fixed; /* Necessary to move it anywhere on screen */
+      background: #fbdae1;
+      color: #ff4d6d;
+      transition: all 0.2s ease;
+      z-index: 999;
     }
 
     .yay {
-      margin-top: 15px;
-      font-size: 20px;
+      margin-top: 20px;
+      font-size: 24px;
       display: none;
+      color: #ff4d6d;
+      font-weight: bold;
     }
   </style>
 </head>
-
 <body>
 
-  <div class="card">
-    <div style="font-size:40px;">😺 ❤️</div>
+  <div class="card" id="mainCard">
+    <div style="font-size:60px;">🐱</div>
     <h2>Diwaker, will you be my Valentine?</h2>
 
-    <button id="yesBtn">Yes</button>
+    <div class="btn-container">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
 
-    <div class="yay" id="yayText">YAY!! 🎉💖</div>
+    <div class="yay" id="yayText">YAY!! 💖✨</div>
   </div>
-
-  <button id="noBtn">No</button>
 
   <script>
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
     const yayText = document.getElementById("yayText");
+    const card = document.getElementById("mainCard");
 
-    // Initial position of No button
-    noBtn.style.left = "50%";
-    noBtn.style.top = "70%";
+    let yesSize = 18; // Initial font size
 
     noBtn.addEventListener("mouseover", () => {
-      const padding = 20;
+      // 1. Calculate a random position
+      // We subtract the button width/height so it doesn't go off-screen
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
 
-      const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-      const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
 
-      const randomX = Math.random() * maxX;
-      const randomY = Math.random() * maxY;
-
-      noBtn.style.left = randomX + "px";
-      noBtn.style.top = randomY + "px";
+      // 2. Make the "Yes" button grow to be more tempting!
+      yesSize += 5;
+      yesBtn.style.fontSize = `${yesSize}px`;
+      yesBtn.style.padding = `${yesSize/2}px ${yesSize}px`;
     });
 
     yesBtn.addEventListener("click", () => {
       yayText.style.display = "block";
       noBtn.style.display = "none";
+      // Hide the question and the "Yes" button
+      document.querySelector('h2').style.display = "none";
+      yesBtn.style.display = "none";
     });
   </script>
-
 </body>
 </html>
